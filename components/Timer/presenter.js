@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import Button from '../Button';
 
+function formatTime(second) {
+	let minutes = Math.floor(second / 60);
+	second -= minutes * 60;
+	let seconds = parseInt(second % 60, 10);
+	return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+}
+
 class Timer extends Component {
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		const currentProps = this.props;
@@ -18,13 +25,12 @@ class Timer extends Component {
 	}
 
 	render() {
-		console.log(this.props);
 		const { isPlaying, elapsedTime, timerDuration, startTimer, restartTimer } = this.props;
 		return (
 			<View style={styles.container}>
 				<StatusBar barStyle={'light-content'} />
 				<View style={styles.topSide}>
-					<Text style={styles.time}>30:00</Text>
+					<Text style={styles.time}>{formatTime(timerDuration - elapsedTime)}</Text>
 				</View>
 				<View style={styles.botSide}>
 					{!isPlaying && <Button iconName="play-circle" onPress={startTimer} />}
