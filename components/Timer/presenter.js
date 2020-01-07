@@ -1,8 +1,22 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
-import Button from '../Button/index';
+import Button from '../Button';
 
-class Timer extends React.Component {
+class Timer extends Component {
+	UNSAFE_componentWillReceiveProps(nextProps) {
+		const currentProps = this.props;
+		if (!currentProps.isPlaying && nextProps.isPlaying) {
+			const timerInterval = setInterval(() => {
+				currentProps.addSecond();
+			}, 1000);
+			this.setState({
+				timerInterval
+			});
+		} else if (currentProps.isPlaying && !nextProps.isPlaying) {
+			clearInterval(this.state.timerInterval);
+		}
+	}
+
 	render() {
 		console.log(this.props);
 		const { isPlaying, elapsedTime, timerDuration, startTimer, restartTimer } = this.props;
@@ -13,8 +27,8 @@ class Timer extends React.Component {
 					<Text style={styles.time}>30:00</Text>
 				</View>
 				<View style={styles.botSide}>
-					{!isPlaying ? <Button iconName="play-circle" onPress={startTimer} /> : null}
-					{isPlaying ? <Button iconName="stop-circle" onPress={restartTimer} /> : null}
+					{!isPlaying && <Button iconName="play-circle" onPress={startTimer} />}
+					{isPlaying && <Button iconName="stop-circle" onPress={restartTimer} />}
 				</View>
 			</View>
 		);
