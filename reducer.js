@@ -70,10 +70,12 @@ function applyAddSecond(state) {
 	}
 }
 
-const actionCreator = {
+const actionCreators = {
 	startTimer,
 	restartTimer,
 	addSecond
 };
+
+export { actionCreators };
 
 export default reducer;
